@@ -1,0 +1,57 @@
+body {
+	background: #f1f1f1;
+}
+html, body {
+	height: 100%;
+}
+body.loading {
+	background-image: url('images/ajax-loader.gif');
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
+/*
+jQuery mixitup
+https://mixitup.kunkalabs.com/
+ */
+.movies-list > .movie {
+	display: none;
+}
+
+/*
+General Styling
+ */
+.movies-filtersort {
+	display: none;
+	margin-top: 30px;
+}
+.thumbnail:hover {
+	cursor: pointer;
+}
+.title > span {
+	opacity: 0.5;
+}
+.modal .movie-genre span {
+	margin-right: 10px;
+	font-size: 16px;
+}
+@media (min-width: 992px) {
+	.movies-list > .movie {
+		min-height: 720px;
+	}
+}
+
+/*
+Clear the float every new rows
+*/
+/*@media (max-width: 992px) {
+	.movies-list > .col-sm-6:nth-child(2n+1) { 
+		clear: left; 
+	}
+}
+@media (min-width: 992px) {
+	.movies-list > .col-md-4:nth-child(3n+1),
+	.movies-list > .col-lg-4:nth-child(3n+1) { 
+		clear: left; 
+	}
+}*/
