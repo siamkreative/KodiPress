@@ -16,12 +16,25 @@ function kodipress_styles() {
 		wp_enqueue_script( 'jquery' );
 	}
 	
+	/**
+	 * Load all vendor scripts / plugins
+	 */
 	wp_enqueue_script( 'kodipress-boostrap', '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js', array( 'jquery' ), '3.3.2', true );
 	wp_enqueue_script( 'kodipress-handlebars', '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js', array( 'jquery' ), '2.0.0', true );
 	wp_enqueue_script( 'kodipress-lazyload', '//cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js', array( 'jquery' ), '1.9.1', true );
 	wp_enqueue_script( 'kodipress-mixitup', '//cdn.jsdelivr.net/jquery.mixitup/latest/jquery.mixitup.min.js', array( 'jquery' ), '2.1.6', true );
 
+	/**
+	 * Main script with useful variables
+	 * http://code.tutsplus.com/tutorials/how-to-pass-php-data-and-strings-to-javascript-in-wordpress--wp-34699
+	 */
 	wp_enqueue_script( 'kodipress-scripts', get_template_directory_uri() . '/js/kodipress.js', array( 'jquery' ), '1.0.0', true );
+	$passed_data = array(
+		'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+		'ip_address' => get_option('kp_ip_address'),
+		'searching_movies' => __( 'Searching movies...', 'kodipress' )
+		);
+	wp_localize_script( 'kodipress-scripts', 'kodipress', $passed_data );
 }
 
 add_action( 'wp_enqueue_scripts', 'kodipress_styles' );
