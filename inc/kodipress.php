@@ -47,7 +47,8 @@ function wp_kodi() {
 	global $wpdb; // this is how you get access to the database
 
 	$data = $_POST['endpoint'];
-	$url = 'http://192.168.1.102:8080/jsonrpc?request=' . $data;
+	$ip_address = get_option('kp_ip_address');
+	$url = 'http://' . $ip_address . '/jsonrpc?request=' . $data;
 	$args = array(
 		'headers' => array(
 			'Authorization' => 'Basic ' . base64_encode( julien . ':' . pepito )
@@ -62,3 +63,23 @@ function wp_kodi() {
 }
 
 add_action( 'wp_ajax_kodi', 'wp_kodi' );
+
+
+/**
+ * Register and define the settings
+ */
+$kp_general_setting = new kp_general_setting();
+
+class kp_general_setting {
+	function kp_general_setting( ) {
+		add_filter( 'admin_init' , array( &$this , 'register_fields' ) );
+	}
+	function register_fields() {
+		register_setting( 'general', 'kp_ip_address', 'esc_attr' );
+		add_settings_field('kp_ip_address', '<label for="kp_ip_address">'.__('Raspberry Pi URL' , 'kp_ip_address' ).'</label>' , array(&$this, 'fields_html') , 'general' );
+	}
+	function fields_html() {
+		$value = get_option( 'kp_ip_address', '' );
+		echo '<input type="text" id="kp_ip_address" name="kp_ip_address" value="' . $value . '" class="regular-text ltr"><p class="description">This is the IP address of your Raspberry Pi and the port you\'re using. Usually something like <code>192.168.X.XX:8080</code>.</p>';
+	}
+}
