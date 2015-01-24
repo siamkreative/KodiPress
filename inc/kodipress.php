@@ -20,6 +20,17 @@ add_action( 'wp_enqueue_scripts', 'kodipress_styles' );
 
 
 /**
+ * Add Additional Classes to Body
+ */
+add_filter('body_class', 'multisite_body_classes');
+
+function multisite_body_classes($classes) {
+	$classes[] = 'loading';
+	return $classes;
+}
+
+
+/**
  * AJAX JSON RPC Api
  */
 function wp_kodi() {
