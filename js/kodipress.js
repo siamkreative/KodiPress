@@ -64,15 +64,17 @@
 			/*
 			Execute jQuery plugins
 			 */
+			$('img.lazy').lazyload({
+				event: 'show_thumbnails',
+				skip_invisible: false
+			});
 			movies.mixItUp({
 				selectors: {
 					target: '.movie'
 				},
 				callbacks: {
 					onMixLoad: function (state) {
-						console.log('MixItUp ready!');
 						$('.movies-filtersort').fadeIn();
-						$('img.lazy').lazyload();
 					},
 					onMixStart: function (state, futureState) {
 						body.addClass('loading');
@@ -80,6 +82,8 @@
 					},
 					onMixEnd: function (state) {
 						body.removeClass('loading');
+						$('img.lazy').trigger('show_thumbnails');
+
 						/**
 						 * Count the amount of movies depending on filters, genre, etc
 						 */
