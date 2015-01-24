@@ -45,7 +45,8 @@
 					.text(moviesGenre[i])
 					.attr({
 						'type': 'button',
-						'data-filter': '.' + moviesGenre[i]
+						'data-filter': '.' + moviesGenre[i],
+						'onclick': 'this.blur();'
 					})
 					.addClass('btn btn-default filter')
 					.appendTo($('.movies-genres'));

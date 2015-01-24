@@ -4,12 +4,12 @@
 <div class="row movies-filtersort">
 	<div class="col-lg-6 col-md-6">
 		<h4>Filter by Genre:</h4>
-		<div class="btn-group" role="group" aria-label="genres" id="movies-genres">
-			<button type="button" class="btn btn-default filter" data-filter="all">All</button>
+		<div class="movies-genres" role="group" aria-label="genres">
+			<button type="button" class="btn btn-default filter" data-filter="all" onclick="this.blur();">All</button>
 		</div>
 	</div>
 	<div class="col-lg-6 col-md-6 text-right">
-		<h4>Sort by Year / Date Added / Runtime </h4>
+		<h4>Sort by</h4>
 		<div class="btn-group" role="group">
 			<button type="button" class="btn btn-default filter" data-filter=".played-yes">Only Played</button>
 			<div class="btn-group" role="group">
