@@ -3,70 +3,10 @@
 	$(function () {
 
 		/* Query the libraries */
-		var Artists = {
-			"jsonrpc": "2.0",
-			"method": "AudioLibrary.GetArtists",
-			"params": {
-				"limits": {
-					"start": 0,
-					"end": 75
-				},
-				"properties": ["thumbnail", "fanart", "born", "formed", "died", "disbanded", "yearsactive", "mood", "style", "genre"],
-				"sort": {
-					"order": "ascending",
-					"method": "artist",
-					"ignorearticle": true
-				}
-			},
-			"id": 1
-		};
-		var Albums = {
-			"jsonrpc": "2.0",
-			"method": "AudioLibrary.GetAlbums",
-			"params": {
-				"limits": {
-					"start": 0,
-					"end": 50
-				},
-				"properties": ["playcount", "artist", "genre", "rating", "thumbnail", "year", "mood", "style"],
-				"sort": {
-					"order": "ascending",
-					"method": "album",
-					"ignorearticle": true
-				}
-			},
-			"id": "libAlbums"
-		};
-		var Songs = {
-			"jsonrpc": "2.0",
-			"method": "AudioLibrary.GetSongs",
-			"params": {
-				"limits": {
-					"start": 0,
-					"end": 25
-				},
-				"properties": ["artist", "duration", "album", "track"],
-				"sort": {
-					"order": "ascending",
-					"method": "track",
-					"ignorearticle": true
-				}
-			},
-			"id": "libSongs"
-		};
 		var Movies = {
 			"jsonrpc": "2.0",
 			"method": "VideoLibrary.GetMovies",
 			"params": {
-				/*"filter": {
-					"field": "playcount",
-					"operator": "is",
-					"value": "0"
-				},
-				"limits": {
-					"start": 0,
-					"end": 75
-				},*/
 				"properties": ["title", "genre", "year", "rating", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "playcount", "writer", "studio", "fanart", "thumbnail", "file", "dateadded", "art", "runtime"],
 				"sort": {
 					"order": "ascending",
@@ -76,67 +16,17 @@
 			},
 			"id": "libMovies"
 		};
-		var TVShows = {
-			"jsonrpc": "2.0",
-			"method": "VideoLibrary.GetTVShows",
-			"params": {
-				"filter": {
-					"field": "playcount",
-					"operator": "is",
-					"value": "0"
-				},
-				"limits": {
-					"start": 0,
-					"end": 75
-				},
-				"properties": ["art", "genre", "plot", "title", "originaltitle", "year", "rating", "thumbnail", "playcount", "file", "fanart"],
-				"sort": {
-					"order": "ascending",
-					"method": "label"
-				}
-			},
-			"id": "libTvShows"
-		};
-		var MusicVideos = {
-			"jsonrpc": "2.0",
-			"method": "VideoLibrary.GetMusicVideos",
-			"params": {
-				"properties": ["title", "thumbnail", "artist", "album", "genre", "lastplayed", "year", "runtime", "fanart", "file", "streamdetails"],
-				"sort": {
-					"order": "ascending",
-					"method": "artist",
-					"ignorearticle": true
-				}
-			},
-			"id": "libMusicVideos"
-		};
-		var AudioPlaylist = {
-			"jsonrpc": "2.0",
-			"method": "Playlist.GetItems",
-			"params": {
-				"properties": ["title", "album", "artist", "duration"],
-				"playlistid": 0
-			},
-			"id": 1
-		};
-		var VideoPlaylist = {
-			"jsonrpc": "2.0",
-			"method": "Playlist.GetItems",
-			"params": {
-				"properties": ["runtime", "showtitle", "season", "title", "artist"],
-				"playlistid": 1
-			},
-			"id": 1
-		};
 
 		// Do WordPress ajax here
 		// http://stackoverflow.com/a/10360054
-		var ajaxurl = '/wp-admin/admin-ajax.php';
+		var movies = $('#movies'),
+			body = $('body');
 		var data = {
 			'action': 'kodi',
 			'endpoint': encodeURIComponent(JSON.stringify(Movies))
 		};
-		$.post(ajaxurl, data, function (wpResponse) {
+
+		$.post(kodipress.ajaxurl, data, function (wpResponse) {
 			var obj = jQuery.parseJSON(wpResponse);
 			console.log(obj);
 
@@ -158,7 +48,7 @@
 						'data-filter': '.' + moviesGenre[i]
 					})
 					.addClass('btn btn-default filter')
-					.appendTo($('#movies-genres'));
+					.appendTo($('.movies-genres'));
 			});
 
 			/*
@@ -167,13 +57,13 @@
 			var getTemplate = $('#movies-template').html(),
 				template = Handlebars.compile(getTemplate),
 				result = template(obj.result);
-			$('#movies').html(result);
-			$('body').removeClass('loading');
+			movies.html(result);
+			body.removeClass('loading');
 
 			/*
 			Execute jQuery plugins
 			 */
-			$('#movies').mixItUp({
+			movies.mixItUp({
 				selectors: {
 					target: '.movie'
 				},
@@ -184,9 +74,11 @@
 						$('img.lazy').lazyload();
 					},
 					onMixStart: function (state, futureState) {
-						$('.search-status').html('Searching movies...');
+						body.addClass('loading');
+						$('.search-status').html(kodipress.searching_movies);
 					},
 					onMixEnd: function (state) {
+						body.removeClass('loading');
 						/**
 						 * Count the amount of movies depending on filters, genre, etc
 						 */
@@ -254,7 +146,7 @@
 			$('#movie-play').on('click', function (event) {
 				event.preventDefault();
 				// Play a single video from file
-				var urlPlay = 'http://192.168.1.102:8080/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"' + file + '"}}}';
+				var urlPlay = kodipress.ip_address + '/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"' + file + '"}}}';
 				location.href = urlPlay;
 			});
 		});
