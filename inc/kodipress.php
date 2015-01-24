@@ -31,6 +31,12 @@ function multisite_body_classes($classes) {
 
 
 /**
+ * Register Custom Navigation Walker
+ */
+require_once('wp_bootstrap_navwalker.php');
+
+
+/**
  * AJAX JSON RPC Api
  */
 function wp_kodi() {
