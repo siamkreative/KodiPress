@@ -25,8 +25,12 @@ add_action( 'wp_enqueue_scripts', 'kodipress_styles' );
 add_filter('body_class', 'multisite_body_classes');
 
 function multisite_body_classes($classes) {
-	$classes[] = 'loading';
-	return $classes;
+	if ( is_front_page() ) {
+		$classes[] = 'loading';
+		return $classes;
+	} else {
+		return $classes;
+	}
 }
 
 
